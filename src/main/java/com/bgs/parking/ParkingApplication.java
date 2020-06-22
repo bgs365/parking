@@ -5,6 +5,7 @@ import com.bgs.parking.model.Cathegorie;
 import com.bgs.parking.model.Parking;
 import com.bgs.parking.model.Vehicule;
 import com.bgs.parking.service.ParkingGestionService;
+import com.bgs.parking.utils.DurationFormater;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -31,7 +32,6 @@ public class ParkingApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        log.info("EXECUTING : command line runner");
         initParking();
     }
 
@@ -83,10 +83,25 @@ public class ParkingApplication implements CommandLineRunner {
                 LocalDateTime.of(LocalDate.of(2020,6,23), LocalTime.of(0,37))
         );
 
-        log.info(parkingGestionService.tempsPasseAuParking(parking, voiture));
-        log.info(parkingGestionService.tempsPasseAuParking(parking, moto));
-        log.info(parkingGestionService.montantDu(parking, voiture));
-        log.info(parkingGestionService.montantDu(parking, moto));
+        log.info("-------------- VOITURE --------------");
+        log.info(String.format("- véhicule : %s %s",
+                voiture.getCathegorie().getNom(),
+                voiture.getTypeCarburant().getNom()
+        ));
+        log.info(String.format("- temps passé : %s",
+                DurationFormater.formatDuration(parkingGestionService.tempsPasseAuParking(parking, voiture))
+        ));
+        log.info(String.format("- montant dû : %f euros", parkingGestionService.montantDu(parking, voiture)));
+
+        log.info("-------------- MOTO --------------");
+        log.info(String.format("- véhicule : %s %s",
+                moto.getCathegorie().getNom(),
+                moto.getTypeCarburant().getNom()
+        ));
+        log.info(String.format("- temps passé : %s",
+                DurationFormater.formatDuration(parkingGestionService.tempsPasseAuParking(parking, moto))
+        ));
+        log.info(String.format("- montant dû : %f euros", parkingGestionService.montantDu(parking, moto)));
 
         log.info(parking.toString());
 
