@@ -7,11 +7,10 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class ParkingGestionService {
@@ -26,23 +25,24 @@ public class ParkingGestionService {
     }
 
     public boolean vehiculeSortant(Parking parking, Vehicule vehicule, LocalDateTime heureSortie){
-        try {
-            parking.getMouvementVehicules().stream()
+        AtomicBoolean estSortie = new AtomicBoolean(false);
+        parking.getMouvementVehicules().stream()
                     .filter(
                             mouvementVehicule -> mouvementVehicule.getVehicule().equals(vehicule)
                                     && mouvementVehicule.getHeureSortie() == null
+                                    && mouvementVehicule.getHeureEntree() !=null
                     )
                     .findFirst()
                     .ifPresent(
-                            mouvementVehicules -> mouvementVehicules.setHeureSortie(heureSortie)
+                            mouvementVehicules -> {
+                                mouvementVehicules.setHeureSortie(heureSortie);
+                                estSortie.set(true);
+                            }
                     );
-            return true;
-        } catch ( Exception e){
-            return false;
-        }
+        return estSortie.get();
     }
 
-    public Duration tempsPasseAuParking(Parking parking, Vehicule vehicule){
+    public Duration tempsPasseAuParkingLorsDuDernierPasssage(Parking parking, Vehicule vehicule){
         AtomicReference<Duration> tempsPasse = new AtomicReference<>();
         List<MouvementVehicules> mouvementList =  parking.getMouvementVehicules().stream().filter(
                 mouvementVehicule -> mouvementVehicule.getVehicule().equals(vehicule)
@@ -61,7 +61,7 @@ public class ParkingGestionService {
     }
 
     public Double montantDu(Parking parking, Vehicule vehicule){
-        long numberOfHours = (long)Math.ceil(tempsPasseAuParking(parking, vehicule).getSeconds() / 3600.);
+        long numberOfHours = (long)Math.ceil(tempsPasseAuParkingLorsDuDernierPasssage(parking, vehicule).getSeconds() / 3600.);
         return numberOfHours * parking.getTarif().get(vehicule.getCathegorie());
     }
 

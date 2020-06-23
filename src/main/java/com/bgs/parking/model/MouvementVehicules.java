@@ -10,7 +10,9 @@ import java.time.LocalDateTime;
 @Builder
 @ToString
 public class MouvementVehicules {
+    @NonNull
     private Vehicule vehicule;
+    @NonNull
     private LocalDateTime heureEntree;
     private LocalDateTime heureSortie;
 }

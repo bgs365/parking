@@ -6,9 +6,9 @@ import java.util.concurrent.TimeUnit;
 public enum DurationFormater {
     ;
     public static String formatDuration(Duration duration) {
-        return String.format(" %sh %sm %ss",
+        return String.format(" %sh%sm ",
                 duration.toHours(),
-                duration.toMinutes() - TimeUnit.HOURS.toMinutes(duration.toHours()),
-                duration.getSeconds() - TimeUnit.MINUTES.toSeconds(duration.toMinutes()));
+                duration.toMinutes() - TimeUnit.HOURS.toMinutes(duration.toHours())
+               );
     }
 }
