@@ -13,7 +13,6 @@ import java.util.Set;
 @ToString
 public class Parking {
     private long id;
-    private Set<Categories> vehiculesAcceptee;
     private List<MouvementVehicule> mouvementVehicules;
     private Map<Categories,Double> tarif;
     private int nombreDePlaceDisponoible;

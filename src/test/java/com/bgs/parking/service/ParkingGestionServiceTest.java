@@ -31,7 +31,6 @@ public class ParkingGestionServiceTest {
 
     @BeforeEach
     void setUp() {
-        Set<Categories> cathegoriesAcceptés = new HashSet<>(Arrays.asList(Categories.DEUX_ROUES, Categories.QUATRES_ROUES));
         Map<Categories,Double> tarifs =new HashMap<Categories, Double>() {{
             put(Categories.QUATRES_ROUES,2.);
             put(Categories.DEUX_ROUES, 1.);
@@ -39,7 +38,6 @@ public class ParkingGestionServiceTest {
 
         parking = Parking.builder()
                 .id(1l)
-                .vehiculesAcceptee(cathegoriesAcceptés)
                 .tarif(tarifs)
                 .nombreDePlaceDisponoible(50)
                 .mouvementVehicules(new ArrayList<>())
@@ -49,7 +47,7 @@ public class ParkingGestionServiceTest {
     @ParameterizedTest
     @MethodSource("buildDataSourceForEntreeVehicule")
     void shouldAddOnevehicule(Vehicule vehicule, LocalDateTime heureEntree) {
-        boolean bienAjoute = parkingGestionService.vehiculeEntrant(parking, vehicule, heureEntree );
+        boolean bienAjoute = parkingGestionService.estVehiculeEntrant(parking, vehicule, heureEntree );
 
         assertThat(true).isEqualTo(bienAjoute);
         assertThat(vehicule).isEqualTo(parking.getMouvementVehicules().get(0).getVehicule());
@@ -62,7 +60,7 @@ public class ParkingGestionServiceTest {
                         Vehicule.builder()
                         .id(1l)
                         .typeCarburant(Carburant.ESSENCE)
-                        .cathegorie(Categories.QUATRES_ROUES)
+                        .categorie(Categories.QUATRES_ROUES)
                         .build(),
                         LocalDateTime.of(LocalDate.of(2020,6,22), LocalTime.of(13,24))
                 ),
@@ -70,7 +68,7 @@ public class ParkingGestionServiceTest {
                         Vehicule.builder()
                                 .id(2l)
                                 .typeCarburant(Carburant.ESSENCE)
-                                .cathegorie(Categories.DEUX_ROUES)
+                                .categorie(Categories.DEUX_ROUES)
                                 .build(),
                         LocalDateTime.of(LocalDate.of(2020,6,22), LocalTime.of(19,30))
                 )
@@ -80,8 +78,8 @@ public class ParkingGestionServiceTest {
     @ParameterizedTest
     @MethodSource("buildDataSourceForSortieVehicule")
     void shouldAddHeureSortie(Vehicule vehicule, LocalDateTime heureEntree, LocalDateTime heureSortie ) {
-        parkingGestionService.vehiculeEntrant(parking, vehicule, heureEntree );
-        boolean estSortie = parkingGestionService.vehiculeSortant(parking, vehicule, heureSortie );
+        parkingGestionService.estVehiculeEntrant(parking, vehicule, heureEntree );
+        boolean estSortie = parkingGestionService.estVehiculeSortant(parking, vehicule, heureSortie );
         assertThat(true).isEqualTo(estSortie);
         assertThat(heureSortie).isEqualTo(parking.getMouvementVehicules().get(0).getHeureSortie());
     }
@@ -92,7 +90,7 @@ public class ParkingGestionServiceTest {
                         Vehicule.builder()
                         .id(1l)
                         .typeCarburant(Carburant.ESSENCE)
-                        .cathegorie(Categories.QUATRES_ROUES)
+                        .categorie(Categories.QUATRES_ROUES)
                         .build(),
                         LocalDateTime.of(LocalDate.of(2020,6,22), LocalTime.of(13,24)),
                         LocalDateTime.of(LocalDate.of(2020,6,22), LocalTime.of(15,10))
@@ -101,7 +99,7 @@ public class ParkingGestionServiceTest {
                         Vehicule.builder()
                                 .id(2l)
                                 .typeCarburant(Carburant.ESSENCE)
-                                .cathegorie(Categories.DEUX_ROUES)
+                                .categorie(Categories.DEUX_ROUES)
                                 .build(),
                         LocalDateTime.of(LocalDate.of(2020,6,22), LocalTime.of(19,30)),
                         LocalDateTime.of(LocalDate.of(2020,6,23), LocalTime.of(0,37))
@@ -112,7 +110,7 @@ public class ParkingGestionServiceTest {
     @ParameterizedTest
     @MethodSource("buildDataSourceForSortieVehiculeSansEntree")
     void shouldNotAddHeureSortie(Vehicule vehicule, LocalDateTime heureSortie ) {
-        boolean estSortie = parkingGestionService.vehiculeSortant(parking, vehicule, heureSortie );
+        boolean estSortie = parkingGestionService.estVehiculeSortant(parking, vehicule, heureSortie );
         assertThat(false).isEqualTo(estSortie);
     }
 
@@ -122,7 +120,7 @@ public class ParkingGestionServiceTest {
                         Vehicule.builder()
                         .id(1l)
                         .typeCarburant(Carburant.ESSENCE)
-                        .cathegorie(Categories.QUATRES_ROUES)
+                        .categorie(Categories.QUATRES_ROUES)
                         .build(),
                         LocalDateTime.of(LocalDate.of(2020,6,22), LocalTime.of(15,10))
                 ),
@@ -130,7 +128,7 @@ public class ParkingGestionServiceTest {
                         Vehicule.builder()
                                 .id(2l)
                                 .typeCarburant(Carburant.ESSENCE)
-                                .cathegorie(Categories.DEUX_ROUES)
+                                .categorie(Categories.DEUX_ROUES)
                                 .build(),
                         LocalDateTime.of(LocalDate.of(2020,6,23), LocalTime.of(0,37))
                 )
@@ -140,8 +138,8 @@ public class ParkingGestionServiceTest {
     @ParameterizedTest
     @MethodSource("buildDataSourceForDuration")
     void shouldHaveRigthDuration(Vehicule vehicule, LocalDateTime heureEntree, LocalDateTime heureSortie ) {
-        parkingGestionService.vehiculeEntrant(parking, vehicule, heureEntree );
-        parkingGestionService.vehiculeSortant(parking, vehicule, heureSortie );
+        parkingGestionService.estVehiculeEntrant(parking, vehicule, heureEntree );
+        parkingGestionService.estVehiculeSortant(parking, vehicule, heureSortie );
         assertThat(Duration.between(heureEntree,heureSortie)).isEqualTo(parkingGestionService.tempsPasseAuParkingLorsDuDernierPasssage(parking, vehicule));
     }
 
@@ -151,7 +149,7 @@ public class ParkingGestionServiceTest {
                         Vehicule.builder()
                                 .id(1l)
                                 .typeCarburant(Carburant.ESSENCE)
-                                .cathegorie(Categories.QUATRES_ROUES)
+                                .categorie(Categories.QUATRES_ROUES)
                                 .build(),
                         LocalDateTime.of(LocalDate.of(2020,6,22), LocalTime.of(13,24)),
                         LocalDateTime.of(LocalDate.of(2020,6,22), LocalTime.of(15,10))
@@ -160,7 +158,7 @@ public class ParkingGestionServiceTest {
                         Vehicule.builder()
                                 .id(2l)
                                 .typeCarburant(Carburant.ESSENCE)
-                                .cathegorie(Categories.DEUX_ROUES)
+                                .categorie(Categories.DEUX_ROUES)
                                 .build(),
                         LocalDateTime.of(LocalDate.of(2020,6,22), LocalTime.of(19,30)),
                         LocalDateTime.of(LocalDate.of(2020,6,23), LocalTime.of(0,37))
@@ -171,8 +169,8 @@ public class ParkingGestionServiceTest {
     @ParameterizedTest
     @MethodSource("buildDataSourceForPrice")
     void shouldHaveRightPrice(Vehicule vehicule, LocalDateTime heureEntree, LocalDateTime heureSortie, double prix ) {
-        parkingGestionService.vehiculeEntrant(parking, vehicule, heureEntree );
-        parkingGestionService.vehiculeSortant(parking, vehicule, heureSortie );
+        parkingGestionService.estVehiculeEntrant(parking, vehicule, heureEntree );
+        parkingGestionService.estVehiculeSortant(parking, vehicule, heureSortie );
         assertThat(prix).isEqualTo(parkingGestionService.montantDu(parking, vehicule));
     }
 
@@ -182,7 +180,7 @@ public class ParkingGestionServiceTest {
                         Vehicule.builder()
                                 .id(1l)
                                 .typeCarburant(Carburant.ESSENCE)
-                                .cathegorie(Categories.QUATRES_ROUES)
+                                .categorie(Categories.QUATRES_ROUES)
                                 .build(),
                         LocalDateTime.of(LocalDate.of(2020,6,22), LocalTime.of(13,24)),
                         LocalDateTime.of(LocalDate.of(2020,6,22), LocalTime.of(15,10)),
@@ -192,7 +190,7 @@ public class ParkingGestionServiceTest {
                         Vehicule.builder()
                                 .id(2l)
                                 .typeCarburant(Carburant.ESSENCE)
-                                .cathegorie(Categories.DEUX_ROUES)
+                                .categorie(Categories.DEUX_ROUES)
                                 .build(),
                         LocalDateTime.of(LocalDate.of(2020,6,22), LocalTime.of(19,30)),
                         LocalDateTime.of(LocalDate.of(2020,6,23), LocalTime.of(0,37)),

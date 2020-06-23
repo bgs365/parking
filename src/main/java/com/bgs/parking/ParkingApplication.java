@@ -37,7 +37,6 @@ public class ParkingApplication implements CommandLineRunner {
 
     private void initParking(){
 
-        Set<Categories> cathegoriesAcceptés = new HashSet<>(Arrays.asList(Categories.DEUX_ROUES, Categories.QUATRES_ROUES));
         Map<Categories,Double> tarifs = new HashMap<Categories, Double>() {{
             put(Categories.QUATRES_ROUES,2.);
             put(Categories.DEUX_ROUES, 1.);
@@ -45,7 +44,6 @@ public class ParkingApplication implements CommandLineRunner {
 
         Parking parking = Parking.builder()
                 .id(1l)
-                .vehiculesAcceptee(cathegoriesAcceptés)
                 .tarif(tarifs)
                 .nombreDePlaceDisponoible(50)
                 .mouvementVehicules(new ArrayList<>())
@@ -54,30 +52,30 @@ public class ParkingApplication implements CommandLineRunner {
         Vehicule voiture = Vehicule.builder()
                 .id(1l)
                 .typeCarburant(Carburant.ESSENCE)
-                .cathegorie(Categories.QUATRES_ROUES)
+                .categorie(Categories.QUATRES_ROUES)
                 .build();
         Vehicule moto = Vehicule.builder()
                 .id(2l)
                 .typeCarburant(Carburant.ESSENCE)
-                .cathegorie(Categories.DEUX_ROUES)
+                .categorie(Categories.DEUX_ROUES)
                 .build();
-        parkingGestionService.vehiculeEntrant(
+        parkingGestionService.estVehiculeEntrant(
                 parking,
                 voiture,
                 LocalDateTime.of(LocalDate.of(2020,6,22), LocalTime.of(13,24))
         );
-        parkingGestionService.vehiculeEntrant(
+        parkingGestionService.estVehiculeEntrant(
                 parking,
                 moto,
                 LocalDateTime.of(LocalDate.of(2020,6,22), LocalTime.of(19,30))
         );
 
-        parkingGestionService.vehiculeSortant(
+        parkingGestionService.estVehiculeSortant(
                 parking,
                 voiture,
                 LocalDateTime.of(LocalDate.of(2020,6,22), LocalTime.of(15,10))
         );
-        parkingGestionService.vehiculeSortant(
+        parkingGestionService.estVehiculeSortant(
                 parking,
                 moto,
                 LocalDateTime.of(LocalDate.of(2020,6,23), LocalTime.of(0,37))
@@ -85,7 +83,7 @@ public class ParkingApplication implements CommandLineRunner {
 
         log.info("-------------- VOITURE --------------");
         log.info(String.format("- véhicule : %s %s",
-                voiture.getCathegorie().getNom(),
+                voiture.getCategorie().getNom(),
                 voiture.getTypeCarburant().getNom()
         ));
         log.info(String.format("- temps passé : %s",
@@ -95,7 +93,7 @@ public class ParkingApplication implements CommandLineRunner {
 
         log.info("-------------- MOTO --------------");
         log.info(String.format("- véhicule : %s %s",
-                moto.getCathegorie().getNom(),
+                moto.getCategorie().getNom(),
                 moto.getTypeCarburant().getNom()
         ));
         log.info(String.format("- temps passé : %s",

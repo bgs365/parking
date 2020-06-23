@@ -10,14 +10,18 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @Service
 public class ParkingGestionService {
 
     private static final double NOMBRE_DE_SECONDE_PAR_HEURE = 3600.;
+    Predicate<MouvementVehicule> estToujoursAuParking = (MouvementVehicule mouvementVehicule) ->
+             mouvementVehicule.getHeureSortie() == null
+            && mouvementVehicule.getHeureEntree() !=null;
 
-    public boolean vehiculeEntrant(Parking parking, Vehicule vehicule, LocalDateTime heureEntree){
+    public boolean estVehiculeEntrant(Parking parking, Vehicule vehicule, LocalDateTime heureEntree){
         return parking.getMouvementVehicules().add(
                 MouvementVehicule.builder()
                         .vehicule(vehicule)
@@ -26,14 +30,12 @@ public class ParkingGestionService {
         );
     }
 
-    public boolean vehiculeSortant(Parking parking, Vehicule vehicule, LocalDateTime heureSortie){
+    public boolean estVehiculeSortant(Parking parking, Vehicule vehicule, LocalDateTime heureSortie){
         AtomicBoolean estSortie = new AtomicBoolean(false);
         parking.getMouvementVehicules().stream()
                     .filter(
                             mouvementVehicule -> mouvementVehicule.getVehicule().equals(vehicule)
-                                    && mouvementVehicule.getHeureSortie() == null
-                                    && mouvementVehicule.getHeureEntree() !=null
-                    )
+                    ).filter(estToujoursAuParking)
                     .findFirst()
                     .ifPresent(
                             mouvementVehicules -> {
@@ -65,7 +67,7 @@ public class ParkingGestionService {
         long nombreHeures = (long)Math.ceil(
                 tempsPasseAuParkingLorsDuDernierPasssage(parking, vehicule).getSeconds() / NOMBRE_DE_SECONDE_PAR_HEURE
         );
-        return nombreHeures * parking.getTarif().get(vehicule.getCathegorie());
+        return nombreHeures * parking.getTarif().get(vehicule.getCategorie());
     }
 
 
