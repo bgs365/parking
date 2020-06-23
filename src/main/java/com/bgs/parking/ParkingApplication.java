@@ -1,11 +1,11 @@
 package com.bgs.parking;
 
 import com.bgs.parking.model.Carburant;
-import com.bgs.parking.model.Cathegorie;
+import com.bgs.parking.model.Categories;
 import com.bgs.parking.model.Parking;
 import com.bgs.parking.model.Vehicule;
 import com.bgs.parking.service.ParkingGestionService;
-import com.bgs.parking.utils.DurationFormater;
+import com.bgs.parking.utils.FormateurDeDuree;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -37,10 +37,10 @@ public class ParkingApplication implements CommandLineRunner {
 
     private void initParking(){
 
-        Set<Cathegorie> cathegoriesAcceptés = new HashSet<>(Arrays.asList(Cathegorie.DEUX_ROUES,Cathegorie.QUATRES_ROUES));
-        Map<Cathegorie,Double> tarifs =new HashMap<Cathegorie, Double>() {{
-            put(Cathegorie.QUATRES_ROUES,2.);
-            put(Cathegorie.DEUX_ROUES, 1.);
+        Set<Categories> cathegoriesAcceptés = new HashSet<>(Arrays.asList(Categories.DEUX_ROUES, Categories.QUATRES_ROUES));
+        Map<Categories,Double> tarifs = new HashMap<Categories, Double>() {{
+            put(Categories.QUATRES_ROUES,2.);
+            put(Categories.DEUX_ROUES, 1.);
         }};
 
         Parking parking = Parking.builder()
@@ -54,12 +54,12 @@ public class ParkingApplication implements CommandLineRunner {
         Vehicule voiture = Vehicule.builder()
                 .id(1l)
                 .typeCarburant(Carburant.ESSENCE)
-                .cathegorie(Cathegorie.QUATRES_ROUES)
+                .cathegorie(Categories.QUATRES_ROUES)
                 .build();
         Vehicule moto = Vehicule.builder()
                 .id(2l)
                 .typeCarburant(Carburant.ESSENCE)
-                .cathegorie(Cathegorie.DEUX_ROUES)
+                .cathegorie(Categories.DEUX_ROUES)
                 .build();
         parkingGestionService.vehiculeEntrant(
                 parking,
@@ -89,7 +89,7 @@ public class ParkingApplication implements CommandLineRunner {
                 voiture.getTypeCarburant().getNom()
         ));
         log.info(String.format("- temps passé : %s",
-                DurationFormater.formatDuration(parkingGestionService.tempsPasseAuParkingLorsDuDernierPasssage(parking, voiture))
+                FormateurDeDuree.formatDuration(parkingGestionService.tempsPasseAuParkingLorsDuDernierPasssage(parking, voiture))
         ));
         log.info(String.format("- montant dû : %.2f euros", parkingGestionService.montantDu(parking, voiture)));
 
@@ -99,7 +99,7 @@ public class ParkingApplication implements CommandLineRunner {
                 moto.getTypeCarburant().getNom()
         ));
         log.info(String.format("- temps passé : %s",
-                DurationFormater.formatDuration(parkingGestionService.tempsPasseAuParkingLorsDuDernierPasssage(parking, moto))
+                FormateurDeDuree.formatDuration(parkingGestionService.tempsPasseAuParkingLorsDuDernierPasssage(parking, moto))
         ));
         log.info(String.format("- montant dû : %.2f euros", parkingGestionService.montantDu(parking, moto)));
 

@@ -1,6 +1,6 @@
 package com.bgs.parking.service;
 
-import com.bgs.parking.model.MouvementVehicules;
+import com.bgs.parking.model.MouvementVehicule;
 import com.bgs.parking.model.Parking;
 import com.bgs.parking.model.Vehicule;
 import org.springframework.stereotype.Service;
@@ -15,9 +15,11 @@ import java.util.stream.Collectors;
 @Service
 public class ParkingGestionService {
 
+    private static final double NOMBRE_DE_SECONDE_PAR_HEURE = 3600.;
+
     public boolean vehiculeEntrant(Parking parking, Vehicule vehicule, LocalDateTime heureEntree){
         return parking.getMouvementVehicules().add(
-                MouvementVehicules.builder()
+                MouvementVehicule.builder()
                         .vehicule(vehicule)
                         .heureEntree(heureEntree)
                         .build()
@@ -44,11 +46,10 @@ public class ParkingGestionService {
 
     public Duration tempsPasseAuParkingLorsDuDernierPasssage(Parking parking, Vehicule vehicule){
         AtomicReference<Duration> tempsPasse = new AtomicReference<>();
-        List<MouvementVehicules> mouvementList =  parking.getMouvementVehicules().stream().filter(
+        List<MouvementVehicule> mouvementList =  parking.getMouvementVehicules().stream().filter(
                 mouvementVehicule -> mouvementVehicule.getVehicule().equals(vehicule)
         ).collect(Collectors.toList());
         long nombreDeMouvementPourLeVehicule = mouvementList.size();
-
         mouvementList.stream().skip(nombreDeMouvementPourLeVehicule - 1)
                 .findFirst()
                 .ifPresent(
@@ -61,8 +62,10 @@ public class ParkingGestionService {
     }
 
     public Double montantDu(Parking parking, Vehicule vehicule){
-        long numberOfHours = (long)Math.ceil(tempsPasseAuParkingLorsDuDernierPasssage(parking, vehicule).getSeconds() / 3600.);
-        return numberOfHours * parking.getTarif().get(vehicule.getCathegorie());
+        long nombreHeures = (long)Math.ceil(
+                tempsPasseAuParkingLorsDuDernierPasssage(parking, vehicule).getSeconds() / NOMBRE_DE_SECONDE_PAR_HEURE
+        );
+        return nombreHeures * parking.getTarif().get(vehicule.getCathegorie());
     }
 
 

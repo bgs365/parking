@@ -1,17 +1,15 @@
 package com.bgs.parking.service;
 
 import com.bgs.parking.model.Carburant;
-import com.bgs.parking.model.Cathegorie;
+import com.bgs.parking.model.Categories;
 import com.bgs.parking.model.Parking;
 import com.bgs.parking.model.Vehicule;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -33,10 +31,10 @@ public class ParkingGestionServiceTest {
 
     @BeforeEach
     void setUp() {
-        Set<Cathegorie> cathegoriesAcceptés = new HashSet<>(Arrays.asList(Cathegorie.DEUX_ROUES,Cathegorie.QUATRES_ROUES));
-        Map<Cathegorie,Double> tarifs =new HashMap<Cathegorie, Double>() {{
-            put(Cathegorie.QUATRES_ROUES,2.);
-            put(Cathegorie.DEUX_ROUES, 1.);
+        Set<Categories> cathegoriesAcceptés = new HashSet<>(Arrays.asList(Categories.DEUX_ROUES, Categories.QUATRES_ROUES));
+        Map<Categories,Double> tarifs =new HashMap<Categories, Double>() {{
+            put(Categories.QUATRES_ROUES,2.);
+            put(Categories.DEUX_ROUES, 1.);
         }};
 
         parking = Parking.builder()
@@ -64,7 +62,7 @@ public class ParkingGestionServiceTest {
                         Vehicule.builder()
                         .id(1l)
                         .typeCarburant(Carburant.ESSENCE)
-                        .cathegorie(Cathegorie.QUATRES_ROUES)
+                        .cathegorie(Categories.QUATRES_ROUES)
                         .build(),
                         LocalDateTime.of(LocalDate.of(2020,6,22), LocalTime.of(13,24))
                 ),
@@ -72,7 +70,7 @@ public class ParkingGestionServiceTest {
                         Vehicule.builder()
                                 .id(2l)
                                 .typeCarburant(Carburant.ESSENCE)
-                                .cathegorie(Cathegorie.DEUX_ROUES)
+                                .cathegorie(Categories.DEUX_ROUES)
                                 .build(),
                         LocalDateTime.of(LocalDate.of(2020,6,22), LocalTime.of(19,30))
                 )
@@ -94,7 +92,7 @@ public class ParkingGestionServiceTest {
                         Vehicule.builder()
                         .id(1l)
                         .typeCarburant(Carburant.ESSENCE)
-                        .cathegorie(Cathegorie.QUATRES_ROUES)
+                        .cathegorie(Categories.QUATRES_ROUES)
                         .build(),
                         LocalDateTime.of(LocalDate.of(2020,6,22), LocalTime.of(13,24)),
                         LocalDateTime.of(LocalDate.of(2020,6,22), LocalTime.of(15,10))
@@ -103,7 +101,7 @@ public class ParkingGestionServiceTest {
                         Vehicule.builder()
                                 .id(2l)
                                 .typeCarburant(Carburant.ESSENCE)
-                                .cathegorie(Cathegorie.DEUX_ROUES)
+                                .cathegorie(Categories.DEUX_ROUES)
                                 .build(),
                         LocalDateTime.of(LocalDate.of(2020,6,22), LocalTime.of(19,30)),
                         LocalDateTime.of(LocalDate.of(2020,6,23), LocalTime.of(0,37))
@@ -124,7 +122,7 @@ public class ParkingGestionServiceTest {
                         Vehicule.builder()
                         .id(1l)
                         .typeCarburant(Carburant.ESSENCE)
-                        .cathegorie(Cathegorie.QUATRES_ROUES)
+                        .cathegorie(Categories.QUATRES_ROUES)
                         .build(),
                         LocalDateTime.of(LocalDate.of(2020,6,22), LocalTime.of(15,10))
                 ),
@@ -132,7 +130,7 @@ public class ParkingGestionServiceTest {
                         Vehicule.builder()
                                 .id(2l)
                                 .typeCarburant(Carburant.ESSENCE)
-                                .cathegorie(Cathegorie.DEUX_ROUES)
+                                .cathegorie(Categories.DEUX_ROUES)
                                 .build(),
                         LocalDateTime.of(LocalDate.of(2020,6,23), LocalTime.of(0,37))
                 )
@@ -153,7 +151,7 @@ public class ParkingGestionServiceTest {
                         Vehicule.builder()
                                 .id(1l)
                                 .typeCarburant(Carburant.ESSENCE)
-                                .cathegorie(Cathegorie.QUATRES_ROUES)
+                                .cathegorie(Categories.QUATRES_ROUES)
                                 .build(),
                         LocalDateTime.of(LocalDate.of(2020,6,22), LocalTime.of(13,24)),
                         LocalDateTime.of(LocalDate.of(2020,6,22), LocalTime.of(15,10))
@@ -162,7 +160,7 @@ public class ParkingGestionServiceTest {
                         Vehicule.builder()
                                 .id(2l)
                                 .typeCarburant(Carburant.ESSENCE)
-                                .cathegorie(Cathegorie.DEUX_ROUES)
+                                .cathegorie(Categories.DEUX_ROUES)
                                 .build(),
                         LocalDateTime.of(LocalDate.of(2020,6,22), LocalTime.of(19,30)),
                         LocalDateTime.of(LocalDate.of(2020,6,23), LocalTime.of(0,37))
@@ -184,7 +182,7 @@ public class ParkingGestionServiceTest {
                         Vehicule.builder()
                                 .id(1l)
                                 .typeCarburant(Carburant.ESSENCE)
-                                .cathegorie(Cathegorie.QUATRES_ROUES)
+                                .cathegorie(Categories.QUATRES_ROUES)
                                 .build(),
                         LocalDateTime.of(LocalDate.of(2020,6,22), LocalTime.of(13,24)),
                         LocalDateTime.of(LocalDate.of(2020,6,22), LocalTime.of(15,10)),
@@ -194,7 +192,7 @@ public class ParkingGestionServiceTest {
                         Vehicule.builder()
                                 .id(2l)
                                 .typeCarburant(Carburant.ESSENCE)
-                                .cathegorie(Cathegorie.DEUX_ROUES)
+                                .cathegorie(Categories.DEUX_ROUES)
                                 .build(),
                         LocalDateTime.of(LocalDate.of(2020,6,22), LocalTime.of(19,30)),
                         LocalDateTime.of(LocalDate.of(2020,6,23), LocalTime.of(0,37)),

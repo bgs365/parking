@@ -11,6 +11,6 @@ import lombok.Setter;
 @Builder
 public class Vehicule {
     private long id;
-    private Cathegorie cathegorie;
+    private Categories cathegorie;
     private Carburant typeCarburant;
 }

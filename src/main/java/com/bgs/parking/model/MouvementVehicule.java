@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 @ToString
-public class MouvementVehicules {
+public class MouvementVehicule {
     @NonNull
     private Vehicule vehicule;
     @NonNull
