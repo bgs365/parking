@@ -87,7 +87,7 @@ public class ParkingApplication implements CommandLineRunner {
                 voiture.getTypeCarburant().getNom()
         ));
         log.info(String.format("- temps passé : %s",
-                FormateurDeDuree.formatDuration(parkingGestionService.tempsPasseAuParkingLorsDuDernierPasssage(parking, voiture))
+                FormateurDeDuree.INSTANCE.formatDuration(parkingGestionService.tempsPasseAuParkingLorsDuDernierPasssage(parking, voiture))
         ));
         log.info(String.format("- montant dû : %.2f euros", parkingGestionService.montantDu(parking, voiture)));
 
@@ -97,7 +97,7 @@ public class ParkingApplication implements CommandLineRunner {
                 moto.getTypeCarburant().getNom()
         ));
         log.info(String.format("- temps passé : %s",
-                FormateurDeDuree.formatDuration(parkingGestionService.tempsPasseAuParkingLorsDuDernierPasssage(parking, moto))
+                FormateurDeDuree.INSTANCE.formatDuration(parkingGestionService.tempsPasseAuParkingLorsDuDernierPasssage(parking, moto))
         ));
         log.info(String.format("- montant dû : %.2f euros", parkingGestionService.montantDu(parking, moto)));
 
